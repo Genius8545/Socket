@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Chat</title>
+      <style>
+         body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+         }
+
+         #chat {
+            max-width: 550px;
+            margin: -80px auto;
+         }
+         .displayyay {
+            display: block !important;
+         }
+
+         .displayNan {
+            display: none !important;
+         }
+
+         #messages {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            height: 300px;
+            overflow: scroll;
+         }
+
+         #message-form {
+            display: flex;
+            margin-top: 20px;
+         }
+
+         #message-input {
+            flex-grow: 1;
+            font-size: 16px;
+            margin-right: 10px;
+         }
+      </style>
+   </head>
+
+   <body style="background-color: rgb(240, 240, 240)">
+      <div
+         style="
+            background-color: rgb(245, 101, 17);
+            height: 350px;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 110px;
+            box-shadow: 0px 0px 13px 0px;
+         "
+         id="name1"
+      >
+         <h1 style="margin-left: 32%; padding-top: 50px">Chat with Socket</h1>
+         <h2 style="margin-left: 5%">Enter your Name :</h2>
+         <div style="position: relative; top: 25%" id="chat">
+            <input
+               style="
+                  border-radius: 136px;
+                  height: 40px;
+                  width: 100%;
+                  margin-top: 1%;
+                  border: 3px solid #3f51b5;
+               "
+               id="name"
+               id="message-input"
+               autocomplete="off"
+            />
+            <button
+               style="
+                  margin-left: 40%;
+                  margin-top: 15%;
+                  border-radius: 136px;
+                  width: 107px;
+                  height: 40px;
+                  border: 2px solid #0628e5;
+               "
+               onclick="Name()"
+            >
+               Enter
+            </button>
+         </div>
+      </div>
+      <div
+         style="
+            background-color: rgb(245, 101, 17);
+            height: 844px;
+            max-width: 600px;
+            display: none;
+            margin: 0 auto;
+            border-radius: 110px;
+            box-shadow: 0px 0px 13px 0px;
+         "
+         id="name2"
+      >
+         <h1 style="margin-left: 32%; padding-top: 50px">Chat with Socket</h1>
+         <div style="position: relative; top: 25%" id="chat">
+            <ul
+               style="
+                  overflow-y: scroll;
+                  overflow-x: hidden;
+                  background-color: white;
+                  height: 450px;
+               "
+               id="messages"
+            ></ul>
+            <form id="message-form">
+               <input
+                  style="
+                     border-radius: 136px;
+                     height: 40px;
+                     border: 3px solid #3f51b5;
+                  "
+                  id="message-input"
+                  autocomplete="off"
+               />
+               <button
+                  style="
+                     border-radius: 136px;
+                     width: 107px;
+                     border: 2px solid #0628e5;
+                  "
+               >
+                  Send
+               </button>
+            </form>
+         </div>
+      </div>
+      <script src="socket.io/socket.io.js"></script>
+      <script>
+         const socket = io()
+         const form = document.querySelector("#message-form")
+         const input = document.querySelector("#message-input")
+         const messages = document.querySelector("#messages")
+         var x
+         function Name() {
+            console.log("Sheeesh")
+            x = document.getElementById("name").value
+
+            if (x.length === 0) {
+               alert("Enter A valid Name")
+            } else {
+               var element1 = document.getElementById("name1")
+               var element2 = document.getElementById("name2")
+               element1.classList.add("displayNan")
+               element2.classList.add("displayyay")
+            }
+         }
+
+         form.addEventListener("submit", (e) => {
+            e.preventDefault()
+
+            x = x + " : " + input.value
+            if (input.value) {
+               socket.emit("chat message", x)
+               input.value = ""
+            }
+         })
+
+         socket.on("chat message", (msg) => {
+            const li = document.createElement("li")
+            li.textContent = msg
+            messages.appendChild(li)
+         })
+      </script>
+   </body>
+</html>
