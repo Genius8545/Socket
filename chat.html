@@ -125,6 +125,7 @@
                >
                   Send
                </button>
+               <br>
             </form>
          </div>
       </div>
@@ -151,10 +152,10 @@
 
          form.addEventListener("submit", (e) => {
             e.preventDefault()
-
-            x = x + " : " + input.value
+            var y =""
+            y = x + " : " + input.value
             if (input.value) {
-               socket.emit("chat message", x)
+               socket.emit("chat message", y)
                input.value = ""
             }
          })
